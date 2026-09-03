@@ -1,0 +1,3 @@
+project:
+    platform: linux/amd64
+    name: my-toxic-manager
