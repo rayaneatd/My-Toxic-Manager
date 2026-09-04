@@ -1,9 +1,9 @@
-from datetime import datetime, timedelta, timezone
+from datetime import (
+    datetime, timedelta, timezone
+)
 
 from airflow.sdk import dag, task
 from airflow.providers.github.hooks.github import GithubHook
-from github.Event import Event
-from github.PaginatedList import PaginatedList
 from github import Github
 
 from include.discord import send_to_discord
@@ -55,14 +55,14 @@ def toxic_activity_tracker():
 def _get_commits_task(client: Github):
     user_login = client.get_user().login
     
-    yesterday = (datetime.now(timezone.utc)) - timedelta(days=1).strftime('%Y-%m-%d')
+    yesterday = (datetime.now(timezone.utc) - timedelta(days=1)).strftime('%Y-%m-%d')
 
     commits = client.search_commits(query=f"author:{user_login} committer-date:>{yesterday}")
     commit_list = []
     
-    for commit in commits:
+    for commit in commits[:20]:
         commit_list.append(commit.commit.message)
-        
+
     return commit_list
 
 
