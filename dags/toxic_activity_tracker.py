@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from airflow.sdk import dag, task
 from airflow.providers.github.hooks.github import GithubHook
@@ -38,7 +38,9 @@ def toxic_activity_tracker():
     @task
     def send_toxic_message(commits: list):
 
-        return call_groq(commits)
+        response = call_groq(commits)
+        
+        send_to_discord(response)
 
     # call tasks
     commits = get_commits()
@@ -52,15 +54,21 @@ def toxic_activity_tracker():
 
 def _get_commits_task(client: Github):
     events: PaginatedList[Event] = client.get_user().get_events()
-    yesterday = datetime.now() - timedelta(hours=10)
+    yesterday = datetime.now(timezone.utc) - timedelta(days=1)
 
     commit_list = []
-    for event in events[:20]:
-        if event.type == 'PushEvent' and event.created_at > yesterday:
+    for event in events[:50]:
+        event_time = event.created_at
+        if event_time.tzinfo is None:
+            event_time = event_time.replace(tzinfo=timezone.utc)
+
+        if event.type == 'PushEvent' and event_time > yesterday:
             commits = event.payload.get("commits", [])
 
             for commit in commits:
-                commit_list.append(commit.message)
+                message = commit.get("message") if isinstance(commit, dict) else getattr(commit, "message", None)
+                if message:
+                    commit_list.append(message)
     
     return commit_list
 

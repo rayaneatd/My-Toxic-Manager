@@ -5,9 +5,9 @@ from include.discord import send_to_discord
 
 load_dotenv()
 
-GROQ_API_URL = os.getenv("GROQ_API_URL", "https://api.groq.com/openai/v1/chat/completions")
+GROQ_API_URL = os.getenv("GROQ_API_URL") or "https://api.groq.com/openai/v1/chat/completions"
 API_KEY = os.getenv("API_KEY")
-AI_MODEL = os.getenv("AI_MODEL", "openai/gpt-oss-120b")
+AI_MODEL = os.getenv("AI_MODEL") or "openai/gpt-oss-120b"
 
 def call_groq(commits: list) -> str:
     url = GROQ_API_URL
