@@ -7,6 +7,7 @@ from github.PaginatedList import PaginatedList
 from github import Github
 
 from include.discord import send_to_discord
+from include.groq import call_groq
 
 # ===============================================================
 # DIRECTED ACYCLIC GRAPH
@@ -37,7 +38,7 @@ def toxic_activity_tracker():
     @task
     def send_toxic_message(commits: list):
 
-        return _send_toxic_message_task(commits)
+        return call_groq(commits)
 
     # call tasks
     commits = get_commits()
@@ -62,15 +63,6 @@ def _get_commits_task(client: Github):
                 commit_list.append(commit.message)
     
     return commit_list
-
-
-def _send_toxic_message_task(commits: list):
-    if commits:
-        # he roasts my commits
-        pass
-    else:
-        # he roasts me anyways because I didn't do shi
-        pass
 
 
 # INIT DAG
