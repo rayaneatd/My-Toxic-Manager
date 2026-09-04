@@ -70,5 +70,5 @@ def _send_toxic_message_task(commits: list):
         pass
 
 
-
+# INIT DAG
 toxic_activity_tracker()
