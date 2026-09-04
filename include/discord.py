@@ -2,13 +2,12 @@ import os
 import httpx
 
 
-def _get_webhook_url():
-    return os.getenv('webhook_url')
+WEBHOOK_URL = os.getenv('webhook_url')
 
 def send_to_discord(
     message: str
 ) -> None:
-    webhook_url = _get_webhook_url()
+    webhook_url = WEBHOOK_URL
 
 
     payload = {
