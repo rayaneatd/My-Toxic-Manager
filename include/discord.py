@@ -1,8 +1,10 @@
 import os
 import httpx
+from dotenv import load_dotenv
 
+load_dotenv()
 
-WEBHOOK_URL = os.getenv('webhook_url')
+WEBHOOK_URL = os.getenv('WEBHOOK_URL')
 
 def send_to_discord(
     message: str

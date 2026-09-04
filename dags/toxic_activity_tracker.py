@@ -39,6 +39,9 @@ def toxic_activity_tracker():
 
         return _send_toxic_message_task(commits)
 
+    # call tasks
+    commits = get_commits()
+    send_toxic_message(commits)
 
 
 # ===============================================================
