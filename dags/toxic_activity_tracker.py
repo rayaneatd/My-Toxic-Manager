@@ -68,3 +68,7 @@ def _send_toxic_message_task(commits: list):
     else:
         # he roasts me anyways because I didn't do shi
         pass
+
+
+
+toxic_activity_tracker()
